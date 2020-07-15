@@ -1,0 +1,50 @@
+create table test.dwd_base_ad
+(
+	adid  int  not null comment '主键id:广告id',
+	adname string  not null comment '广告名称',
+	dn string  not null comment '网站id',
+	PRIMARY KEY(adid)
+)
+PARTITION BY HASH PARTITIONS 4
+STORED AS KUDU;
+
+drop table test.dwb_test_vip;
+create table test.dwb_test_vip
+(
+	vip_id  int  not null comment '主键id:vipid',
+	vip_level string  ,
+	start_time timestamp  ,
+	end_time timestamp  ,
+	last_modify_time timestamp ,
+	max_free string,
+	min_free  string,
+	next_level string,
+	operator string,
+	dn string,
+	PRIMARY KEY(vip_id)
+)
+PARTITION BY HASH PARTITIONS 4
+STORED AS KUDU;
+
+drop table test.dwb_test_web
+create table test.dwb_test_web
+(
+	siteid  int  not null comment '主键id:vipid',
+	sitename string ,
+	siteurl  String,
+	`delete` String ,
+	createtime string ,
+	creator String ,
+	dn String ,
+	PRIMARY KEY(siteid)
+)
+PARTITION BY HASH PARTITIONS 4
+STORED AS KUDU;
+
+
+kafka-topics --zookeeper node47:2181 --create --replication-factor 2 -partitions 1 --topic  dwb_test_member
+kafka-topics --zookeeper node47:2181 --create --replication-factor 2 -partitions 1 --topic  dwb_test_pay
+kafka-topics --zookeeper node47:2181 --create --replication-factor 2 -partitions 1 --topic  dwb_test_regtype
+
+
+--group.id test --bootstrap.servers node47:9092,node123:9092,node129:9092 --topic test_ad,test_member,test_pay,test_regtype,test_vip,test_web
