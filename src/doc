@@ -40,6 +40,52 @@ create table test.dwb_test_web
 )
 PARTITION BY HASH PARTITIONS 4
 STORED AS KUDU;
+drop table test.dws_member;
+
+create table test.dws_member
+(
+	id  String  ,
+	uid int ,
+	ad_id  int,
+	fullname String ,
+	iconurl string ,
+	mailaddr String ,
+	memberlevel String ,
+	password String ,
+	phone String ,
+	qq String ,
+	register string ,
+	regupdatetime String ,
+	unitname String,
+	userip String ,
+	zipcode String ,
+	appkey String ,
+	appregurl String ,
+	bdp_uuid String ,
+	regsource String ,
+	adname String ,
+	siteid int ,
+	sitename String ,
+	siteurl String ,
+	site_delete String ,
+	site_createtime String ,
+	site_creator String ,
+	vip_id int ,
+	vip_level String,
+	vip_start_time timestamp,
+	vip_end_time timestamp,
+	vip_last_modify_time timestamp,
+	vip_max_free String ,
+	vip_min_free String ,
+	vip_operator String ,
+	paymoney decimal(15,2) default null,
+	dt string,
+	dn string,
+	PRIMARY KEY(id)
+)
+PARTITION BY HASH PARTITIONS 16
+STORED AS KUDU;
+
 
 
 kafka-topics --zookeeper node47:2181 --create --replication-factor 2 -partitions 1 --topic  dwb_test_member
@@ -48,3 +94,8 @@ kafka-topics --zookeeper node47:2181 --create --replication-factor 2 -partitions
 
 
 --group.id test --bootstrap.servers node47:9092,node123:9092,node129:9092 --topic test_ad,test_member,test_pay,test_regtype,test_vip,test_web
+
+kafka-console-consumer --bootstrap-server node123:9092 --topic dwb_test_member --group test  --from-beginning
+
+
+
